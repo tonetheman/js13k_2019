@@ -14,6 +14,7 @@ mkdir ${BUILD}
 echo "copying files..."
 cp src/index.html ${BUILD}
 cp src/ga.js ${BUILD}
+# cp src/kontra.min.js ${BUILD}
 
 echo "moving to build dir..."
 cd ${BUILD}
