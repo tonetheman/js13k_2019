@@ -2,7 +2,7 @@
 
 BUILD=build
 OUT=final.zip
-CL=closure-compiler-v20190709.jar
+CL=libs/closure-compiler-v20190709.jar
 
 echo "removing stuf..."
 rm -rf ${OUT}
