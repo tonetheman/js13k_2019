@@ -20,6 +20,7 @@ echo "moving to build dir..."
 cd ${BUILD}
 
 echo "compressing ga..."
+# comment this out for kontra build
 java -jar ../${CL} --language_in=ECMASCRIPT5 --js ga.js  --js_output_file out.js
 
 echo "removing not used files..."
@@ -30,3 +31,5 @@ zip ../${OUT} *
 
 cd ..
 
+# 5879 - for kontra
+# 6286 - for ga (Global object production version)
