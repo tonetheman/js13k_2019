@@ -52,8 +52,8 @@ function mainline() {
             frameHeight : 16,
             animations : {
                 idle : {
-                    frames: [7,8,9,10],
-                    frameRate: 30
+                    frames: [0]
+                    //frameRate: 30
                 }
             }
         });
@@ -63,7 +63,7 @@ function mainline() {
         a = kontra.Sprite({
             width : 16,
             height : 16,
-            x : 100, y : 100,
+            x : 50, y : 50,
             animations : spriteSheet.animations
         });
         a.playAnimation("idle");
