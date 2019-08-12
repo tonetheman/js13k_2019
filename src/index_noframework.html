@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="noframework_game.js"></script>
+</head>
+<body>
+    <canvas id="c" width="640" height="480"></canvas>
+<script>
+let last = null;
+let C = null; // canvas
+let CTX = null; // main context
+let game = null;
+function _init() {
+    C = document.getElementById("c");
+    CTX = C.getContext("2d");
+    game = new Game();
+    game.states["loading"] = new GameLoading();
+    game.states["playing"] = new GamePlaying();
+    game.changeState("loading");
+}
+function _update(dt) {
+    game.update(dt);
+}
+function _draw() {
+    game.draw();
+}
+function frame(dx) {
+    if (last==null) {
+        last = 0;
+    }
+    let diff = dx-last;
+    _update(diff);
+    _draw();
+    last = dx;
+    requestAnimationFrame(frame);
+}
+function main() {
+    _init();
+    frame(0);
+}
+window.onload = main;
+</script>
+</body>
+</html>
