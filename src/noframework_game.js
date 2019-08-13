@@ -19,6 +19,13 @@ class Sprite {
         this.y = 0;
         this.width = 0;
         this.height = 0;
+
+        // backup in time coords
+        // not sure this is going to work hahah
+        this._oldx = 0;
+        this._oldy = 0;
+        this._old_dx = 0;
+        this._old_dy = 0;
     }
     draw() {
 
@@ -121,7 +128,7 @@ class GamePlaying extends BaseState {
 
             // compute where you end up
             // should i save y
-            
+
             // stop moving up
             this.player.dy = 0;
         }
