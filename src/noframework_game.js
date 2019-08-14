@@ -7,6 +7,10 @@ let _1SECOND = 60
 let EMPTY = 0;
 let GROUND = 1;
 let G_GRAV = 0.05; // super slow for debug
+let _keymap = {};
+let K_LEFT = 37;
+let K_RIGHT = 39;
+let K_UP = 38;
 
 class Player {
     constructor() {
@@ -15,7 +19,7 @@ class Player {
         this.dx = 0; // velocity
         this.dy = 0;
         this.ground = false;
-        this.jumpvel = 2; // not sure about this yet
+        this.jumpvel = 8; // not sure about this yet
     }
     update() {
 
@@ -142,19 +146,20 @@ class GamePlaying extends BaseState {
         // save our spot
         let start_x = this.player.x;
 
-        // TODO: if we have a button press
-        // change vel now!
-        // if buttonPress && this.player.ground
-        // this.player.dy -= this.player.jumpvel
+        if (_keymap[K_UP] && this.player.ground) {
+            this.player.dy -= this.player.jumpvel
+        }
 
         this.player.dx = 0;
-        // TODO if we have a left or right press
-        // if buttonPress left
-        // this.player.dx -= 2;
-        // if buttonPress right
-        // this.player.dx += 2;
 
-        // TODO:
+        // LEFT AND RIGHT KEY PRESSES
+        if (_keymap[K_LEFT]) {
+            this.player.dx -= 2;
+        }
+        if (_keymap[K_RIGHT]) {
+            this.player.dx += 2;
+        }
+
         // now move the player left/right
         this.player.x += this.player.dx;
 
@@ -251,10 +256,22 @@ function loadAllImages() {
     }));
     return Promise.all(a);
 }
+function _keydownHandler(e) {
+    _keymap[e.which] = true;
+}
+function _keyupHandler(e) {
+    _keymap[e.which] = false;
+}
+function _blurHandler() {
+    _keymap = {};
+}
 function _init() {
     C = document.getElementById("c");
     CTX = C.getContext("2d");
     loadAllImages();
+    window.addEventListener("keydown", _keydownHandler);
+    window.addEventListener("keyup", _keyupHandler);
+    window.addEventListener("blur",_blurHandler);
     game = new Game();
     game.states["loading"] = new GameLoading();
     game.states["playing"] = new GamePlaying();
