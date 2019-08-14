@@ -13,7 +13,8 @@ let C = null; // canvas
 let CTX = null; // main context
 let game = null;
 let W = 340, H = 280; // needs to match canvas
-
+let EMPTY = 0;
+let GROUND = 1;
 let G_GRAV = 4;
 
 class Player {
@@ -24,6 +25,48 @@ class Player {
         this.dy = 0;
         this.ground = false;
         this.jumpvel = 2; // not sure about this yet
+    }
+    update() {
+
+    }
+    draw() {
+        CTX.fillStyle = "#00f";
+        CTX.fillRect(this.x,this.y,15,15);
+    }
+}
+
+class Map {
+    constructor() {
+        this.data = [];
+        for (let i=0;i<10;i++) {
+            let tmp = []
+            for (let j=0;j<10;j++) {
+                tmp.push(EMPTY);
+            }
+            this.data.push(tmp);
+        }
+    }
+    fake() {
+        for (let i=0;i<10;i++) {
+            this.data[9][i]=GROUND;
+        }
+    }
+    get(row,col) {
+        return this.data[row][col];
+    }
+    draw() {
+        for (let i=0;i<10;i++) {
+            for (let j=0;j<10;j++) {
+                let v = this.data[i][j];
+                if (v==EMPTY) {
+                    CTX.fillStyle = "#000";
+                } else if (v==GROUND) {
+                    CTX.fillStyle = "#0f0";
+                }
+                
+                CTX.fillRect(j*16,i*16,15,15);
+            }
+        }
     }
 }
 
@@ -92,12 +135,17 @@ class GamePlaying extends BaseState {
     constructor() {
         super();
         this.player = new Player();
+        this.map = new Map();
+        this.map.fake(); // setup a ground
     }
     enter() {
         console.log("game playing started...");
     }
     draw() {
+        //
         CTX.clearRect(0,0,W,H);
+        this.map.draw();
+        this.player.draw();
     }
     update(dt) {
         // save our spot
