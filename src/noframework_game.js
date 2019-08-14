@@ -173,8 +173,9 @@ class GamePlaying extends BaseState {
         this.player.y += this.player.dy;
         
         let _col = Math.floor(this.player.x/16);
+        // this is the row below the player
         let _row = Math.floor(this.player.y/16)+1;
-        //console.log(_col,_row);
+        
         this.player.ground = false; // assume it is not
 
         // only check if moving down
@@ -183,7 +184,7 @@ class GamePlaying extends BaseState {
 
                 let val = this.map.data[_row][_col];
                 if (val!=0) {
-                    //console.log("hit floor");
+
                     //this.player.y = _row*16;
                     // stop moving down
                     this.player.y = (_row * 16)-16;
