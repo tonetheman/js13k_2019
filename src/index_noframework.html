@@ -5,14 +5,39 @@
 </head>
 <body>
     <canvas id="c" width="640" height="480"></canvas>
-<script>
+<script> 
 let last = null;
 let C = null; // canvas
 let CTX = null; // main context
 let game = null;
+function loadAllImages() {
+    let a = [];
+    a.push(new Promise(function(res,rej) {
+        let i1 = new Image();
+        i1.src = "/assets/littledude.png";
+        i1.onload = function() {
+            res({"name":"player",img:i1});
+        }
+        i1.onerror = function(e) {
+            rej("could not load i1");
+        }
+    }));
+    a.push(new Promise(function(res,rej){
+        let i2 = new Image();
+        i2.src = "/assets/ground.png";
+        i2.onload = function() {
+            res({"name":"ground",img:i2});
+        }
+        i2.onerror = function(e) {
+            rej("could not load i2");
+        }
+    }));
+    return Promise.all(a);
+}
 function _init() {
     C = document.getElementById("c");
     CTX = C.getContext("2d");
+    loadAllImages();
     game = new Game();
     game.states["loading"] = new GameLoading();
     game.states["playing"] = new GamePlaying();
