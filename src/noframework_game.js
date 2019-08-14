@@ -6,7 +6,7 @@ let W = 340, H = 280; // needs to match canvas
 let _1SECOND = 60
 let EMPTY = 0;
 let GROUND = 1;
-let G_GRAV = 0.01; // super slow for debug
+let G_GRAV = 0.05; // super slow for debug
 
 class Player {
     constructor() {
@@ -168,16 +168,17 @@ class GamePlaying extends BaseState {
         this.player.y += this.player.dy;
         
         let _col = Math.floor(this.player.x/16);
-        let _row = Math.floor(this.player.y/16);
-        console.log(_col,_row);
+        let _row = Math.floor(this.player.y/16)+1;
+        //console.log(_col,_row);
         this.player.ground = false; // assume it is not
 
         // only check if moving down
         if (this.player.dy >= 0) {
-            if ((_col>=0) && (_row>=0)) {
+            if ((_row!==undefined) || (_col!==undefined)) {
+
                 let val = this.map.data[_row][_col];
                 if (val!=0) {
-                    console.log("hit floor");
+                    //console.log("hit floor");
                     //this.player.y = _row*16;
                     // stop moving down
                     this.player.y = (_row * 16)-16;
