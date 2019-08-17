@@ -35,6 +35,16 @@ Board.prototype = {
   }
 }
 
+function _findPointerPosition() {
+  console.log("looking for sprite...");
+  for (let i=0;i<background_sprite.length;i++) {
+    let cs = background_sprite[i];
+    if (kontra.pointerOver(cs)) {
+      console.log("found it",cs._tonyi,cs._tonyj);
+    }
+  }
+}
+
 function _init() {
   init = kontra.init;
   Sprite = kontra.Sprite;
@@ -42,6 +52,10 @@ function _init() {
   let tmp = init("c");
 
   kontra.initPointer();
+
+  kontra.onPointerUp(function(a,b){
+    _findPointerPosition();
+  });
 
   canvas = tmp.canvas;
   context = tmp.context;
@@ -55,14 +69,17 @@ function _init() {
 function _create_sprites() {
   for(let i=0;i<8;i++) {
     for (let j=0;j<8;j++) {
+      // background sprite for board
       let tmp = Sprite({
         x : j*16,
         y : i*16,
         color : 'green',
         width: 15,
         height: 15,
+        _tonyi : i,
+        _tonyj : j,
         onUp : function() {
-          console.log("clicked empty space!");
+          //console.log("clicked empty space!");
         }
       });
       background_sprite.push(tmp);
@@ -89,6 +106,9 @@ function _create_sprites() {
       }
     }
   }
+  // need to call track
+  // if you want pointer interactions
+  kontra.track(background_sprite); // track all the background sprites
 }
 
 function main() {
@@ -97,43 +117,25 @@ function main() {
 
     _create_sprites();
 
-    // red sprite here
-    /*
-    let sprite = Sprite({
-        x: 100,        // starting x,y position of the sprite
-        y: 80,
-        color: 'red',  // fill color of the sprite rectangle
-        width: 20,     // width and height of the sprite rectangle
-        height: 40,
-        dx: 2          // move the sprite 2px to the right every frame
-      });
-    */
-      let loop = GameLoop({  // create the main game loop
-        update: function() { // update the game state
-          
-          
-          // red sprite updates here
-          // sprite.update();
+    let loop = GameLoop({  // create the main game loop
       
-          // wrap the sprites position when it reaches
-          // the edge of the screen
-          //if (sprite.x > canvas.width) {
-          //  sprite.x = -sprite.width;
-          //}
-        },
-        render: function() { // render the game state
-          for (let i=0;i<background_sprite.length;i++) {
-            background_sprite[i].render();
-          }
-          for (let i=0;i<foreground_sprite.length;i++) {
-            foreground_sprite[i].render();
-          }
-          // red sprite
-          //sprite.render();
+      update: function() { // update the game state
+
+
+      },
+      
+      render: function() { // render the game state
+        for (let i=0;i<background_sprite.length;i++) {
+          background_sprite[i].render();
         }
-      });
-      
-      loop.start();    // start the game
+        for (let i=0;i<foreground_sprite.length;i++) {
+          foreground_sprite[i].render();
+        }
+      }
+
+    });
+
+    loop.start();    // start the game
 }
 
 window.onload = main;
