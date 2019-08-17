@@ -1,6 +1,5 @@
 
-let init = null, Sprite = null, GameLoop = null;
-let canvas = null, context = null;
+let Sprite = null;
 let board = null;
 let background_sprite = [];
 let foreground_sprite = [];
@@ -46,19 +45,15 @@ function _findPointerPosition() {
 }
 
 function _init() {
-  init = kontra.init;
+  // cause i am lazy
   Sprite = kontra.Sprite;
-  GameLoop = kontra.GameLoop;
-  let tmp = init("c");
+  let tmp = kontra.init("c");
 
   kontra.initPointer();
 
   kontra.onPointerUp(function(a,b){
     _findPointerPosition();
   });
-
-  canvas = tmp.canvas;
-  context = tmp.context;
 
   // game related
   board = new Board();
@@ -117,7 +112,7 @@ function main() {
 
     _create_sprites();
 
-    let loop = GameLoop({  // create the main game loop
+    let loop = kontra.GameLoop({  // create the main game loop
       
       update: function() { // update the game state
 
