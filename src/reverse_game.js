@@ -125,7 +125,7 @@ function _create_sprites() {
       }
     }
   }
-  
+
   // need to call track
   // if you want pointer interactions
   kontra.track(background_sprite); // track all the background sprites
@@ -145,9 +145,13 @@ function main() {
       },
       
       render: function() { // render the game state
+
+        // draw the board first
         for (let i=0;i<background_sprite.length;i++) {
           background_sprite[i].render();
         }
+
+        // draw players on top
         for (let i=0;i<foreground_sprite.length;i++) {
           foreground_sprite[i].render();
         }
