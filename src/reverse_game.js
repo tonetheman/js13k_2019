@@ -1,9 +1,11 @@
 
 let Sprite = null;
-let board = null;
 let background_sprite = [];
 let foreground_sprite = [];
 
+let _game = null; // this will be of type OthelloGame
+
+// start of Board
 let EMPTY = 0;
 let WHITE = 1;
 let BLACK = 2;
@@ -33,15 +35,25 @@ Board.prototype = {
     this.data[4][3] = BLACK;
   }
 }
+//
+///////////////////////////// end of board
+//
+
+function OthelloGame() {
+  this.current_color = BLACK;
+  this.board = null;
+}
 
 function _findPointerPosition() {
-  console.log("looking for sprite...");
+  //console.log("looking for sprite...");
   for (let i=0;i<background_sprite.length;i++) {
     let cs = background_sprite[i];
     if (kontra.pointerOver(cs)) {
-      console.log("found it",cs._tonyi,cs._tonyj);
+      return { i : cs._tonyi, j : cs._tonyj }
+      //console.log("found it",cs._tonyi,cs._tonyj);
     }
   }
+  return null;
 }
 
 function _init() {
@@ -52,13 +64,20 @@ function _init() {
   kontra.initPointer();
 
   kontra.onPointerUp(function(a,b){
-    _findPointerPosition();
+    let res = _findPointerPosition();
+    if (res!=null) {
+      console.log("clicked on space",res);
+    } else {
+      console.log("got a null from click... :(")
+    }
   });
 
   // game related
-  board = new Board();
-  board.clear();
-  board.setup();
+  _game = new OthelloGame();
+
+  _game.board = new Board();
+  _game.board.clear();
+  _game.board.setup();
 }
 
 function _create_sprites() {
@@ -80,7 +99,7 @@ function _create_sprites() {
       background_sprite.push(tmp);
 
       // create sprites for player and computer
-      if (board.data[i][j]==WHITE) {
+      if (_game.board.data[i][j]==WHITE) {
         let tmp = Sprite({
           x : j*16,
           y : i*16,
@@ -89,7 +108,7 @@ function _create_sprites() {
           height:15
         });
         foreground_sprite.push(tmp);
-      } else if (board.data[i][j]==BLACK) {
+      } else if (_game.board.data[i][j]==BLACK) {
         let tmp = Sprite({
           x : j*16,
           y : i*16,
