@@ -2,6 +2,8 @@
 let Sprite = null;
 let background_sprite = [];
 let foreground_sprite = [];
+let SPRITE_STRIDE = 32;
+let SPRITE_SIZE = 31;
 
 let _game = null; // this will be of type OthelloGame
 
@@ -45,12 +47,10 @@ function OthelloGame() {
 }
 
 function _findPointerPosition() {
-  //console.log("looking for sprite...");
   for (let i=0;i<background_sprite.length;i++) {
     let cs = background_sprite[i];
     if (kontra.pointerOver(cs)) {
-      return { i : cs._tonyi, j : cs._tonyj }
-      //console.log("found it",cs._tonyi,cs._tonyj);
+      return { row : cs._tonyi, col : cs._tonyj }
     }
   }
   return null;
@@ -59,10 +59,14 @@ function _findPointerPosition() {
 function _init() {
   // cause i am lazy
   Sprite = kontra.Sprite;
-  let tmp = kontra.init("c");
 
+  // c is the id of the canvas
+  kontra.init("c");
+
+  // needed for mouse interaction
   kontra.initPointer();
 
+  // this is global to the entire game
   kontra.onPointerUp(function(a,b){
     let res = _findPointerPosition();
     if (res!=null) {
@@ -75,6 +79,7 @@ function _init() {
   // game related
   _game = new OthelloGame();
 
+  // make a board
   _game.board = new Board();
   _game.board.clear();
   _game.board.setup();
@@ -85,11 +90,11 @@ function _create_sprites() {
     for (let j=0;j<8;j++) {
       // background sprite for board
       let tmp = Sprite({
-        x : j*16,
-        y : i*16,
+        x : j*SPRITE_STRIDE,
+        y : i*SPRITE_STRIDE,
         color : 'green',
-        width: 15,
-        height: 15,
+        width: SPRITE_SIZE,
+        height: SPRITE_SIZE,
         _tonyi : i,
         _tonyj : j,
         onUp : function() {
@@ -101,25 +106,26 @@ function _create_sprites() {
       // create sprites for player and computer
       if (_game.board.data[i][j]==WHITE) {
         let tmp = Sprite({
-          x : j*16,
-          y : i*16,
+          x : j*SPRITE_STRIDE,
+          y : i*SPRITE_STRIDE,
           color: "white",
-          width:15,
-          height:15
+          width:SPRITE_SIZE,
+          height:SPRITE_SIZE
         });
         foreground_sprite.push(tmp);
       } else if (_game.board.data[i][j]==BLACK) {
         let tmp = Sprite({
-          x : j*16,
-          y : i*16,
+          x : j*SPRITE_STRIDE,
+          y : i*SPRITE_STRIDE,
           color: "black",
-          width:15,
-          height:15
+          width:SPRITE_SIZE,
+          height:SPRITE_SIZE
         });
         foreground_sprite.push(tmp);
       }
     }
   }
+  
   // need to call track
   // if you want pointer interactions
   kontra.track(background_sprite); // track all the background sprites
