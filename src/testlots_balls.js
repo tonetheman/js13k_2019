@@ -165,7 +165,18 @@ Ball.prototype = {
             this.y = this.radius
         }
         if (this.y - this.radius > kontra.canvas.height) {
-            this.ttl = -1;
+            // before tony
+            //this.ttl = -1;
+
+            // this causes the balls to bounce
+            // below the line a bit (to the radius i think)
+            //this.dy = -1 * Math.abs(this.dy);
+            this.dy = -1 * Math.abs(this.dy) - this.friction;
+            
+            this.y = kontra.canvas.height - this.radius
+
+
+
         }
     }
 }
@@ -182,9 +193,9 @@ function main() {
     // needed for mouse interaction
     kontra.initPointer();
 
-    for(let i=0;i<1;i++) {
+    for(let i=0;i<3;i++) {
         let tmp = new Ball();
-        console.log(tmp);
+        tmp.x = Math.random() * kontra.canvas.width;
         balls.push(tmp);
         sprites.push(kontra.Sprite(tmp));
     }
