@@ -9,8 +9,8 @@ let _game = null; // this will be of type OthelloGame
 
 // start of Board
 let EMPTY = 0;
-let WHITE = 1;
-let BLACK = 2;
+let WHITE = 1; // COMPUTER
+let BLACK = 2; // HUMAN ALWAYS GOES FIRST
 
 function Board() {
   this.data = [];
