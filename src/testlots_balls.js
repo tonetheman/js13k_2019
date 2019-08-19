@@ -1,5 +1,6 @@
 
 let balls = [];
+let sprites = [];
 
 const BALL_MIN_RADIUS = 10
 const BALL_START_VELOCITY = 1
@@ -173,8 +174,11 @@ class Ball {
 function main() {
     let {canvas,context} = kontra.init("c");
     
-    for(let i=0;i<3;i++) {
-        balls.push(new Ball());
+    for(let i=0;i<1;i++) {
+        let tmp = new Ball();
+        console.log(tmp);
+        balls.push(tmp);
+        sprites.push(kontra.Sprite(tmp));
     }
     let loop = kontra.GameLoop({
         fps: 60,
@@ -183,11 +187,21 @@ function main() {
                 for (let j = i+1; j < balls.length; j++) {
                     balls[i].bounceOff(balls[j]);
                 }
-            }    
+            }
+            
+            for (let i=0;i<sprites.length;i++) {
+                sprites[i].update(dt);
+            }
         },
         render() {
             context.fillRect(0,0,canvas.width,canvas.height);
             //kontra.context.fillRect(0,0,kontra.canvas.width, kontra.canvas.height)
+
+            for (let i=0;i<sprites.length;i++) {
+                sprites[i].render();
+            }
+
+
         }
     }); // end of game loop
     loop.start();
