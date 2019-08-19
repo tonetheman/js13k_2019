@@ -56,20 +56,20 @@ var degreesToRadians = function (deg) {
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 
-class Ball {
-    constructor() {
-        this.type = 'ball';
-        this.radius = 12;
-        this.width =  2 * BALL_MIN_RADIUS;
-        this.height =2 * BALL_MIN_RADIUS;
-        this.color= COLOR_AMBER;
-        this.value= 10;
-        this.dy= 0;
-        this.dx= 0;
-        this.maxVelocity= 10;
-        this.ddy= 0.06;
-        this.friction= 0.005;
-    }
+function Ball() {
+    this.type = 'ball';
+    this.radius = 12;
+    this.width =  2 * BALL_MIN_RADIUS;
+    this.height =2 * BALL_MIN_RADIUS;
+    this.color= COLOR_AMBER;
+    this.value= 10;
+    this.dy= 0;
+    this.dx= 0;
+    this.maxVelocity= 10;
+    this.ddy= 0.06;
+    this.friction= 0.005;
+}
+Ball.prototype = {
     bounceOff(object) {
         // http://www.gamasutra.com/view/feature/131424/pool_hall_lessons_fast_accurate_.php?page=3
         const v1 = { x: this.dx, y: this.dy }
@@ -93,13 +93,13 @@ class Ball {
         };
         //doSpark(midpoint.x, midpoint.y, a1, this.color)
         //doSpark(midpoint.x, midpoint.y, a2, object.color)    
-    }
+    },
     collidesWith(object) {
         let dx = this.x - object.x;
         let dy = this.y - object.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
         return distance < this.radius + object.radius;
-    }
+    },
     render(dt) {
         kontra.context.save()
         // Circle
@@ -117,15 +117,15 @@ class Ball {
             kontra.context.fillText(displayValue, this.x - 0.6*this.radius, this.y)
         }
         kontra.context.restore()
-    }
+    },
     update(dt) {
-        if (!this.released && kontra.pointer.pressed('left')) {
-            this.x = kontra.pointer.x
-            if (!this.lastPosition) this.lastPosition = {x:this.x, y:this.y}
-            this.dx = this.x - this.lastPosition.x
-            this.dy = this.y - this.lastPosition.y
-            this.lastPosition = {x:this.x, y:this.y}
-        } else {
+        //if (!this.released && kontra.pointer.pressed('left')) {
+        //    this.x = kontra.pointer.x
+        //    if (!this.lastPosition) this.lastPosition = {x:this.x, y:this.y}
+        //    this.dx = this.x - this.lastPosition.x
+        //    this.dy = this.y - this.lastPosition.y
+        //    this.lastPosition = {x:this.x, y:this.y}
+        //} else {
             if (!this.released) {
                 this.ttl = 20 * 60;
                 // Add a little jitter to prevent same drops
@@ -134,7 +134,7 @@ class Ball {
             }
             this.released = true
             this.advance()
-        }
+        //}
         this.mass = Math.PI * this.radius * this.radius
     
         // Cap the velocity
@@ -174,6 +174,14 @@ class Ball {
 function main() {
     let {canvas,context} = kontra.init("c");
     
+    // this is weird that i am doing this?
+    // lib should do it?
+    kontra.canvas = canvas;
+    kontra.context = context;
+
+    // needed for mouse interaction
+    kontra.initPointer();
+
     for(let i=0;i<1;i++) {
         let tmp = new Ball();
         console.log(tmp);
