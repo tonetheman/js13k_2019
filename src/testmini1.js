@@ -37,7 +37,24 @@ let mapdata = [
 function drawMap() {
     for(let i=0;i<mapdata.length;i++) {
         for (let j=0;j<mapdata[0].length;j++) {
-            
+		let val = mapdata[i][j];
+		if (val>0) {
+			new kontra.Sprite({
+				x : j*32,
+				y : i*32,
+				width: 31,
+				height: 31,
+				color: "red"
+			});
+		} else {
+			new kontra.Sprite({
+				x : j*32,
+				y : i*32,
+				width : 31,
+				height : 31,
+				color: "white"
+			});
+		}            
         }
     }
 }
