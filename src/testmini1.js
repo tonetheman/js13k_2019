@@ -3,6 +3,8 @@
 let context = null;
 let W = 375, H = 667;
 let pixelsPerBlock = 8;
+let sprites = [];
+let BASESIZE=28;
 
 // see here: 
 /*
@@ -14,14 +16,14 @@ let mapdata = [
 [1,1, 1,1,1, 1,1],
 [1,0, 0,0,0, 0,1],
 [1,0, 0,0,0, 0,1],
+[1,0, 0,1,0, 0,1],
 [1,0, 0,0,0, 0,1],
 [1,0, 0,0,0, 0,1],
 [1,0, 0,0,0, 0,1],
+[1,0, 0,1,0, 0,1],
 [1,0, 0,0,0, 0,1],
-[1,0, 0,0,0, 0,1],
-[1,0, 0,0,0, 0,1],
-[1,0, 0,0,0, 0,1],
-[1,0, 0,0,0, 0,1],
+[1,0, 0,1,0, 0,1],
+[1,0, 0,1,0, 0,1],
 [1,0, 0,0,0, 0,1],
 [1,0, 0,0,0, 0,1],
 [1,0, 0,0,0, 0,1],
@@ -35,25 +37,28 @@ let mapdata = [
 ];
 
 function drawMap() {
+    sprites = [];
     for(let i=0;i<mapdata.length;i++) {
         for (let j=0;j<mapdata[0].length;j++) {
 		let val = mapdata[i][j];
 		if (val>0) {
-			new kontra.Sprite({
-				x : j*32,
-				y : i*32,
-				width: 31,
-				height: 31,
+			let tmp = new kontra.Sprite({
+				x : j*BASESIZE,
+				y : i*BASESIZE,
+				width: BASESIZE-1,
+				height: BASESIZE-1,
 				color: "red"
-			});
+            });
+            sprites.push(tmp);
 		} else {
-			new kontra.Sprite({
-				x : j*32,
-				y : i*32,
-				width : 31,
-				height : 31,
-				color: "white"
-			});
+			let tmp  = new kontra.Sprite({
+				x : j*BASESIZE,
+				y : i*BASESIZE,
+				width : BASESIZE-1,
+				height : BASESIZE-1,
+				color: "blue"
+            });
+            sprites.push(tmp);
 		}            
         }
     }
@@ -69,17 +74,24 @@ function _init() {
     kontra.initPointer();  
   }
   
+function clearC() {
+    context.fillRect(0,0,canvas.width, canvas.height);
+}
 
 function main() {
     _init();
-    
+    // create sprites just once
+    drawMap();
+
     let loop = kontra.GameLoop({ 
         update: function() { 
         },      
         render: function() {
-            context.fillRect(0,0,
-                canvas.width, canvas.height);
-            drawMap();
+            clearC();
+
+            for (let i=0;i<sprites.length;i++) {
+                sprites[i].render();
+            }
         }  
     });
     loop.start();    // start the game
