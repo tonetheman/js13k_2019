@@ -36,6 +36,18 @@ let mapdata = [
 [1,0, 0,0,0, 0,1]
 ];
 
+class Player {
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+        this.dir=0;
+        this.rot=0;
+        this.speed=0;
+        this.moveSpeed = 0.20;
+        this.rotSpeed = 6 * Math.PI/180.0;
+    }
+}
+
 function drawMap() {
     sprites = [];
     for(let i=0;i<mapdata.length;i++) {
