@@ -5,6 +5,7 @@ let W = 375, H = 667;
 let pixelsPerBlock = 8;
 let sprites = [];
 let BASESIZE=28;
+let player = null;
 
 // see here: 
 /*
@@ -35,18 +36,6 @@ let mapdata = [
 [1,0, 0,0,0, 0,1],
 [1,0, 0,0,0, 0,1]
 ];
-
-class Player {
-    constructor() {
-        this.x = 0;
-        this.y = 0;
-        this.dir=0;
-        this.rot=0;
-        this.speed=0;
-        this.moveSpeed = 0.20;
-        this.rotSpeed = 6 * Math.PI/180.0;
-    }
-}
 
 function drawMap() {
     sprites = [];
@@ -84,6 +73,43 @@ function _init() {
 
     // needed for mouse interaction
     kontra.initPointer();  
+    // needed for keys
+    kontra.initKeys();
+
+    player = kontra.Sprite({
+        x : 100, y : 100,
+        width : 4, height: 4,
+        color : "white",
+        rotation : 0,
+        update() {
+            /*
+            TODO: this is asteroids movement
+             NOT RIGHT
+             */
+            if (kontra.keyPressed("left")) {
+                this.rotation += 1;
+            }
+            if (kontra.keyPressed("right")) {
+                this.rotation -= 1;
+            }
+            let cos = Math.cos(this.rotation);
+            let sin = Math.sin(this.rotation);
+            if (kontra.keyPressed("up")) {
+                this.ddx = cos * 0.05;
+                this.ddy = sin * 0.05;
+            } else {
+                this.ddx = this.ddy = 0;
+            }
+
+            this.advance();
+
+            let mag = Math.sqrt(this.dx * this.dx + this.dy*this.dy);
+            if (mag>5) {
+                this.dx *= 0.95;
+                this.dy *= 0.95;
+            }
+        }
+    });
   }
   
 function clearC() {
@@ -96,7 +122,8 @@ function main() {
     drawMap();
 
     let loop = kontra.GameLoop({ 
-        update: function() { 
+        update: function() {
+            player.update();
         },      
         render: function() {
             clearC();
@@ -104,6 +131,8 @@ function main() {
             for (let i=0;i<sprites.length;i++) {
                 sprites[i].render();
             }
+
+            player.render();
         }  
     });
     loop.start();    // start the game
