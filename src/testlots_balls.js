@@ -164,7 +164,7 @@ Ball.prototype = {
             this.dy = Math.abs(this.dy)
             this.y = this.radius
         }
-        if (this.y - this.radius > kontra.canvas.height) {
+        if (this.y  > kontra.canvas.height) {
             // before tony
             //this.ttl = -1;
 
@@ -193,9 +193,10 @@ function main() {
     // needed for mouse interaction
     kontra.initPointer();
 
-    for(let i=0;i<3;i++) {
+    for(let i=0;i<10;i++) {
         let tmp = new Ball();
-        tmp.x = Math.random() * kontra.canvas.width;
+        tmp.x = Math.floor(Math.random() * kontra.canvas.width);
+        tmp.y = Math.floor(Math.random() * kontra.canvas.height);
         balls.push(tmp);
         sprites.push(kontra.Sprite(tmp));
     }
