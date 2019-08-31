@@ -22,6 +22,16 @@ let map = [
     [0,0,0,0,0,0,0],
 ];
 let player = null; // will be a kontra sprite
+let game_map = null;
+
+class GameMap {
+    constructor(mapdata) {
+        this.mapdata = mapdata;
+    }
+    get(x,y) {
+        return this.mapdata[x][y];
+    }
+}
 
 function _setup_sprites() {
     let tmp = kontra.Sprite({
@@ -60,6 +70,8 @@ function _init() {
     kontra.initKeys();
 
     _setup_sprites();
+
+    game_map = new GameMap(map);
 }
 
 function _update_sprites() {
@@ -123,9 +135,17 @@ class Point {
         this.height = game_map.get(self.x-dx, self.y-dy);
         this.distance = distance+this.length;
         if (shift_x) {
-
+            if (info.cos<0) {
+                this.shading = 2;
+            } else {
+                this.shading = 0;
+            }
         } else {
-
+            if (info.sin<0) {
+                this.shading = 2;
+            } else {
+                this.shading = 1;
+            }
         }
         this.offset = offset-Math.floor(offset);
         return this;
@@ -144,14 +164,14 @@ function cast_ray(point,angle,cast_range) {
         let step_y = origin.step(info.cos, info.sin,true);
         let next_step = null;
         if (step_x.length < step_y.length) {
-
+            next_step = step_x.inspect(info,game_map,1,0,dist,step_x.y);
         } else {
-
+            next_step = step_y.inspect(info,game_map,0,1,dist,step_y.x)
         }
         ray.push(next_step);
         origin = next_step;
     }
-
+    return ray;
 }
 
 function _render_sprites() {
