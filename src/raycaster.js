@@ -132,7 +132,8 @@ class Point {
         } else {
             dy = 0;
         }
-        this.height = game_map.get(self.x-dx, self.y-dy);
+        console.log("inspect:",this.x,dx,this.y,dy);
+        this.height = game_map.get(this.x-dx, this.y-dy);
         this.distance = distance+this.length;
         if (shift_x) {
             if (info.cos<0) {
@@ -153,6 +154,7 @@ class Point {
 }
 
 function cast_ray(point,angle,cast_range) {
+    console.log("cast_ray",point,angle,cast_range);
 
     let info = { sin : Math.sin(angle),
         cos : Math.cos(angle)};
@@ -162,12 +164,14 @@ function cast_ray(point,angle,cast_range) {
         let dist = origin.distance;
         let step_x = origin.step(info.sin, info.cos,false);
         let step_y = origin.step(info.cos, info.sin,true);
+        console.log("step x and y ", step_x, step_y);
         let next_step = null;
         if (step_x.length < step_y.length) {
             next_step = step_x.inspect(info,game_map,1,0,dist,step_x.y);
         } else {
             next_step = step_y.inspect(info,game_map,0,1,dist,step_y.x)
         }
+        console.log("next step is set to",next_step);
         ray.push(next_step);
         origin = next_step;
     }
@@ -181,11 +185,13 @@ function _render_sprites() {
 
     // for each slice in the resolution
     // the width
+    /*
     for(let i=0;i<W;i++) {
         let angle = FOV*(i/W-0.5)
         let point = {x:player.x,y:player.y};
         let ray = cast_ray(point,player.direction+angle,MAX_CAST_RANGE)
     }
+    */
 }
 
 function main() {
@@ -201,6 +207,8 @@ function main() {
     });
     console.log("loop is starting...");
     loop.start();
+
+    cast_ray({x:288,y:640},60,448);
 }
 
 window.onload = main;
